@@ -2,7 +2,7 @@
   "categories": {
     "Bridge Marketing": {
       "apps": ["Google Ads Editor", "Google Sheets", "Lark", "Feishu", "企业微信", "Numbers", "Pages", "Slack"],
-      "urls": ["ads.google.com", "googleads", "sheets.google.com", "docs.google.com/document", "bridge", "lark", "feishu"],
+      "urls": ["ads.google.com", "googleads", "sheets.google.com", "docs.google.com/document", "datastudio.google.com", "meet.google.com", "bridge", "lark", "feishu"],
       "domains": ["bridge-marketing"]
     },
     "滇南米线": {
