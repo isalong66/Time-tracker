@@ -225,8 +225,8 @@ async function runTracker() {
 
 async function generateReport(dateStr) {
   // Use shared report generator
-  const { generateReportContent } = await import('./report-generator.js');
-  const report = generateReportContent(dateStr);
+  const { generateDailyReport } = await import('./report-generator.js');
+  const report = generateDailyReport(dateStr);
   if (!report) {
     console.log(`❌ ${dateStr} 没有记录`);
     return;
