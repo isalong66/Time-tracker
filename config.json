@@ -1,0 +1,36 @@
+{
+  "categories": {
+    "Bridge Marketing": {
+      "apps": ["Google Ads Editor", "Google Sheets", "Lark", "Feishu", "企业微信", "Numbers", "Pages", "Slack"],
+      "urls": ["ads.google.com", "googleads", "sheets.google.com", "docs.google.com/document", "bridge", "lark", "feishu"],
+      "domains": ["bridge-marketing"]
+    },
+    "滇南米线": {
+      "apps": ["Terminal", "Visual Studio Code", "Figma"],
+      "urls": ["diannan", "supabase.co", "vercel.com", "app.diannanricenoodle", "dian-nan-rice-noodle"],
+      "domains": ["diannan-management", "diannan-website"]
+    },
+    "AI / 学习": {
+      "apps": ["Claude", "Cursor", "Codex", "Cherry Studio", "Trae", "Notion"],
+      "urls": ["claude.ai", "chatgpt", "chat.openai", "github.com", "copilot"],
+      "domains": []
+    },
+    "内容创作": {
+      "apps": ["DaVinci Resolve", "Adobe Lightroom", "Adobe Photoshop", "DJI Mimo", "剪映专业版", "iMovie", "GarageBand", "Keynote"],
+      "urls": ["youtube.com/studio", "youtube.com/upload", "canva.com"],
+      "domains": []
+    },
+    "邮件 & 沟通": {
+      "apps": ["Mail", "Spark", "WeChat", "WhatsApp", "Telegram", "Discord"],
+      "urls": ["mail.google.com", "outlook.live.com", "web.whatsapp.com"],
+      "domains": []
+    },
+    "其他": {
+      "apps": [],
+      "urls": [],
+      "domains": []
+    }
+  },
+  "pollIntervalMs": 5000,
+  "idleThresholdMs": 120000
+}

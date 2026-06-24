@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Sensitive — contains Gmail credentials
+email-config.json
+
+# Runtime files
+.tracker.pid
+schedule.log
+launchd*.log
+
+# Tracking data (large, personal)
+data/
+reports/
