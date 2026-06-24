@@ -1,6 +1,19 @@
 #!/bin/bash
-export PATH="/Users/isama/.nvm/versions/node/v24.13.0/bin:$PATH"
-cd /Users/isama/time-tracker
+# Time Tracker — launchd 调度入口
+# 自动适配：无需修改即可在任何 Mac 上运行
+
+# 自动探测 node 路径（支持 nvm / homebrew / 系统自带）
+if [ -s "$HOME/.nvm/nvm.sh" ]; then
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+elif [ -x "/opt/homebrew/bin/node" ]; then
+  export PATH="/opt/homebrew/bin:$PATH"
+elif [ -x "/usr/local/bin/node" ]; then
+  export PATH="/usr/local/bin:$PATH"
+fi
+
+DIR="$HOME/time-tracker"
+cd "$DIR" || exit 1
 
 SENTINEL_DIR="data/sent"
 mkdir -p "$SENTINEL_DIR"

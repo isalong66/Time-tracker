@@ -51,3 +51,32 @@ launchctl load ~/Library/LaunchAgents/com.isama.time-tracker-monthly.plist
 - 改类目 → config.json
 - 改发送时间 → ~/Library/LaunchAgents/ 下对应 .plist
 - 改功能 → 告诉 Claude 要改什么
+
+## 分享给同事
+
+同事也是 Mac 的话，三步搞定：
+
+```
+# 1. 把项目文件夹复制给她（或用 U 盘 / AirDrop）
+# 2. 她在自己电脑上运行：
+bash ~/time-tracker/setup.sh
+
+# 3. 按提示输入她的 Gmail 和收件人邮箱，完成。
+```
+
+setup.sh 会自动：
+- 检测 Node.js 环境（支持 nvm / homebrew / 系统安装）
+- 安装 npm 依赖
+- 引导配置邮箱
+- 创建 launchd 定时任务（日报 7:30/8:30/9:30 + 周报 + 月报）
+- 启动追踪器后台进程
+
+### 同事安装后需要做的
+1. 编辑 `config.json` 改成自己的工作类目
+2. 重启追踪器：`node tracker.js --stop && node tracker.js --daemon`
+3. Gmail 需要开启应用专用密码：https://myaccount.google.com/apppasswords
+
+### 技术注意事项
+- 所有路径使用 `$HOME/time-tracker`，不硬编码用户名
+- schedule.sh 自动探测 node 路径（兼容 Intel M1/M2/M3 架构）
+- 哨兵文件在 `data/sent/` 下，防止重复发送日报
