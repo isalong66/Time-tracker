@@ -1,0 +1,13 @@
+{
+  "_note": "客户注册表 — 把 key → Customer ID 填进去，diagnose.js 就可以用别名了",
+  "vida-ai": {
+    "name": "VIDA AI",
+    "customerId": "1234567890",
+    "aliases": ["vida.marketing.ai", "VIDA"]
+  },
+  "flova-ai": {
+    "name": "Flova AI",
+    "customerId": "1234567890",
+    "aliases": ["Flova-Bridge", "Flova"]
+  }
+}

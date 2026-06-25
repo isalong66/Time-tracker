@@ -11,4 +11,9 @@ launchd*.log
 
 # Tracking data (large, personal)
 data/
-reports/
+
+# Google Ads credentials (sensitive)
+google-ads/config/google-ads.json
+
+# AI config (API key)
+ai/config/ai-config.json
