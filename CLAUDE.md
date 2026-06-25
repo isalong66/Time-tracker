@@ -17,9 +17,11 @@
 | tracker.js | 后台追踪进程 |
 | report-generator.js | 生成日报/周报/月报 |
 | send-report.js | 邮件发送 |
+| fetch-reports.js | 从 Gmail 拉取历史日报，生成趋势总结 |
+| setup.sh | 一键安装脚本（macOS） |
 | config.json | 类目规则 |
 | email-config.json | 邮箱配置（含 Gmail 密码） |
-| data/ | 原始追踪数据（JSON） |
+| data/ | 原始追踪数据（JSON）+ 邮件缓存 + 趋势报告 |
 | reports/ | 生成的报告（Markdown） |
 
 ## 常用命令
@@ -30,11 +32,18 @@ node ~/time-tracker/tracker.js --report
 # 手动发日报
 node ~/time-tracker/send-report.js daily
 
+# 手动发日报（指定日期）
+node ~/time-tracker/send-report.js daily 2026-06-25
+
 # 手动发周报
 node ~/time-tracker/send-report.js weekly 2026-06-23
 
 # 手动发月报
 node ~/time-tracker/send-report.js monthly 2026-06
+
+# 从 Gmail 拉取历史日报，生成趋势总结
+node ~/time-tracker/fetch-reports.js        # 最近 7 天
+node ~/time-tracker/fetch-reports.js 30     # 最近 30 天
 
 # 停止/启动追踪器
 node ~/time-tracker/tracker.js --stop
@@ -50,7 +59,19 @@ launchctl load ~/Library/LaunchAgents/com.isama.time-tracker-monthly.plist
 - 改邮箱/收件人 → email-config.json
 - 改类目 → config.json
 - 改发送时间 → ~/Library/LaunchAgents/ 下对应 .plist
+- 改趋势报告范围 → fetch-reports.js 的天数参数
 - 改功能 → 告诉 Claude 要改什么
+
+## fetch-reports.js 趋势报告
+
+从 Gmail 自动拉取 Time Tracker 日报邮件，解析后生成趋势总结：
+
+- 支持日期范围（默认 7 天，可传 30 等）
+- 同日多封自动去重，保留数据最完整的一封
+- 输出内容：每日时间对比、类目汇总、最常用 App、Google Ads 账号排行
+- 结构化数据保存在 `data/report-summary.json`，趋势 Markdown 在 `data/trend-report.md`
+- 邮件原文缓存于 `data/email-cache/`
+- 依赖：imapflow, mailparser — `setup.sh` 或 `npm install` 自动安装
 
 ## 分享给同事
 
