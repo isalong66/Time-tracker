@@ -82,9 +82,14 @@ async function main() {
 
   const mode = args[0] || 'daily'; // daily | weekly | monthly
   // 日报默认用昨天（已完整的一天），周报/月报默认用今天
-  let defaultDate = (mode === 'daily' && !args[1])
-    ? ymd(new Date(Date.now() - 86400000))
-    : ymd();
+  let defaultDate;
+  if (mode === 'daily' && !args[1]) {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    defaultDate = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  } else {
+    defaultDate = ymd();
+  }
   let dateStr = args[1] || defaultDate;
 
   let report, subject;
