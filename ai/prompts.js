@@ -3,10 +3,49 @@
  * 这些 prompt 写给 Claude Code，让 Claude 直接分析数据
  */
 
+function buildBridgeDataSection(clientName, bridgeData) {
+  if (!bridgeData) return '';
+
+  const lines = ['## Bridge Marketing 本地报告数据', ''];
+
+  if (bridgeData.reportSummary) {
+    const s = bridgeData.reportSummary;
+    lines.push(`- 报告文件总数: ${s.fileCount}`);
+    if (s.dateRange) lines.push(`- 时间跨度: ${s.dateRange.first} → ${s.dateRange.last}`);
+    lines.push(`- 日报: ${s.types.daily || 0} | 周报: ${s.types.weekly || 0} | 月报: ${s.types.monthly || 0}`);
+    lines.push('');
+  }
+
+  if (bridgeData.placementAnalysis) {
+    const p = bridgeData.placementAnalysis;
+    lines.push('### Placement 排除数据');
+    lines.push(`- 排除记录: ${p.totalPlacements} 条`);
+    lines.push(`- 浪费展示总数: ${p.totalWastedImpressions.toLocaleString()}`);
+    lines.push('');
+    if (p.topWasted && p.topWasted.length > 0) {
+      lines.push('浪费最多的 Placement:');
+      for (const w of p.topWasted.slice(0, 5)) {
+        const name = w.placement.length > 30 ? w.placement.slice(0, 27) + '...' : w.placement;
+        lines.push(`  - ${name}: ${w.impressions.toLocaleString()} 展示 (${w.campaign})`);
+      }
+      lines.push('');
+    }
+    if (p.byReason && p.byReason.length > 0) {
+      lines.push('按原因:');
+      for (const [reason, data] of p.byReason) {
+        lines.push(`  - ${reason}: ${data.impressions.toLocaleString()} 展示`);
+      }
+      lines.push('');
+    }
+  }
+
+  return lines.join('\n');
+}
+
 /**
  * 单客户诊断 prompt
  */
-export function buildDiagnosisPrompt(clientName, adsData, timeData) {
+export function buildDiagnosisPrompt(clientName, adsData, timeData, bridgeData) {
   return `# Google Ads 客户诊断 — ${clientName}
 
 你是 Bridge Marketing 的 Google Ads 优化专家。请分析以下数据并给出诊断建议。
@@ -39,6 +78,8 @@ ${timeData ? `
 最近 7 天在该客户投入: **${timeData.totalMin || 0}分钟**
 ${Object.entries(timeData.modules || {}).map(([mod, min]) => `- ${mod}: ${min}分钟`).join('\n')}
 ` : '(无时间追踪数据)'}
+
+${buildBridgeDataSection(clientName, bridgeData)}
 
 ---
 

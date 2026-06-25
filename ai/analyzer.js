@@ -59,8 +59,30 @@ export async function generateDiagnosis(clientName, adsData, options = {}) {
   // Load time tracker data
   const timeData = loadTimeData([clientName], days);
 
+  // Load Bridge Marketing report data if exists
+  let bridgeData = null;
+  try {
+    const { getClientReportSummary } = await import('../bridge-data/indexer.js');
+    const { parsePlacementCsv, analyzePlacements } = await import('../bridge-data/parser.js');
+    const summary = getClientReportSummary(clientName);
+    if (summary) {
+      bridgeData = { reportSummary: summary };
+      // Parse CSV if available
+      const csvFiles = summary.files?.filter(f => f.ext === '.csv') || [];
+      if (csvFiles.length > 0) {
+        const allPlacements = [];
+        for (const csv of csvFiles) {
+          allPlacements.push(...parsePlacementCsv(csv.path));
+        }
+        bridgeData.placementAnalysis = analyzePlacements(allPlacements);
+      }
+    }
+  } catch {
+    // Bridge data not available, continue without it
+  }
+
   // Build prompt
-  const prompt = buildDiagnosisPrompt(clientName, adsData, timeData);
+  const prompt = buildDiagnosisPrompt(clientName, adsData, timeData, bridgeData);
 
   const date = new Date().toISOString().slice(0, 10);
 
