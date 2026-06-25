@@ -45,6 +45,24 @@ node ~/time-tracker/send-report.js monthly 2026-06
 node ~/time-tracker/fetch-reports.js        # 最近 7 天
 node ~/time-tracker/fetch-reports.js 30     # 最近 30 天
 
+# Google Ads API 授权（一次性）
+node ~/time-tracker/google-ads/setup-auth.js
+
+# Google Ads 数据拉取
+node ~/time-tracker/google-ads/diagnose.js vida-ai      # 拉 7 天数据
+node ~/time-tracker/google-ads/diagnose.js vida-ai --days 30
+
+# AI 客户诊断
+node ~/time-tracker/scripts/analyze-client.js vida-ai            # API 拉数据→生成 prompt
+node ~/time-tracker/scripts/analyze-client.js vida-ai --local    # 用本地缓存
+
+# 客户管理
+node ~/time-tracker/scripts/onboard-client.js     # 录入新客户
+node ~/time-tracker/scripts/dashboard.js          # 客户一览表
+
+# 时间效率交叉分析
+node ~/time-tracker/scripts/correlate.js --client vida-ai --days 7
+
 # 停止/启动追踪器
 node ~/time-tracker/tracker.js --stop
 node ~/time-tracker/tracker.js --daemon
@@ -53,6 +71,31 @@ node ~/time-tracker/tracker.js --daemon
 launchctl load ~/Library/LaunchAgents/com.isama.time-tracker-report.plist
 launchctl load ~/Library/LaunchAgents/com.isama.time-tracker-weekly.plist
 launchctl load ~/Library/LaunchAgents/com.isama.time-tracker-monthly.plist
+```
+
+## Google Ads AI Agent
+
+目录结构：
+| 目录 | 作用 |
+|------|------|
+| `google-ads/` | API 凭证管理 + 数据拉取 |
+| `ai/` | AI 分析 prompt 模板 + 分析编排 |
+| `profiles/` | 每客户一个档案文件夹（snapshots/analyses/actions） |
+| `dash/` | 时间-vs-效果交叉分析 |
+| `scripts/` | CLI 入口（analyze-client, onboard-client, dashboard, correlate） |
+| `lib/` | 共用工具（GA 账号名解析） |
+
+工作流：
+```
+新客户 → onboard-client.js → 创建档案
+            ↓
+拉数据 → diagnose.js → data/ads-data/{client}/
+            ↓
+诊断   → analyze-client.js → data/analysis-prompts/
+            ↓
+Claude 读取 prompt → 输出建议
+            ↓
+效率   → correlate.js → 时间-vs-效果分析
 ```
 
 ## 修改入口
